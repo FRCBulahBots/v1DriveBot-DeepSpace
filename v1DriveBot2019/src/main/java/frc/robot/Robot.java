@@ -68,12 +68,6 @@ public class Robot extends TimedRobot {
     SRX_Slave_L.follow(SRX_Master_L);
     SRX_Slave_R.follow(SRX_Master_R);
 
-    SRX_Master_L.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-
-    SRX_Master_L.changeControlMode(ControlMode.Position); //Change control mode of talon, default is PercentVbus (-1.0 to 1.0)
-    SRX_Master_L.setFeedbackDevice(FeedbackDevice.QuadEncoder); //Set the feedback device that is hooked up to the talon
-    SRX_Master_L.setPID(0.5, 0.001, 0.0); //Set the PID constants (p, i, d)
-    SRX_Master_L.enableControl(); //Enable PID control on the talon  
 
     //Set Neutral Mode on Slaves and Masters
     SRX_Master_L.setNeutralMode(NeutralMode.Brake);
