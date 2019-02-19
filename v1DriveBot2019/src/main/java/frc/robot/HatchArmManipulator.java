@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.Encoder;
 
 public class HatchArmManipulator {
     private Talon _ArmMotor; // Motor controller attached to Arm Mech
-    private int _TargetPosition; // Target Positional value of Arm
+    private int _TargetPosition = 0; // Target Positional value of Arm (Defual target is 0;)
 
     private Encoder _armEncoder; // Encoder that takes motor position readings
 
@@ -23,12 +23,10 @@ public class HatchArmManipulator {
         _armEncoder.setDistancePerPulse(7);
     }
 
-    public void periodicexec(){
-        //double targetval = Dmap(m_joystick.getY(), -1.0f, 1.0f, -2000.0f, 2000.0f);
-        double multiplier = (_TargetPosition - _armEncoder.getDistance()) * 0.002f ;
-        System.out.println(_armEncoder.getDistance());
-       // _ArmMotor.set(multiplier);
-        //System.out.println("mul:"+multiplier);
+    public void periodicexec() {
+        double multiplier = (_TargetPosition - _armEncoder.getDistance()) * kP;
+        //System.out.println(_armEncoder.getDistance());
+        _ArmMotor.set(multiplier);
     }
 
     public void setTargetPosition(ArmPositions pos){ // Method for setting our desired Position of the Arm
@@ -51,10 +49,10 @@ public class HatchArmManipulator {
         }
     }
 
-    enum ArmPositions { // Enum containing all of the possible Arm Postions we may want to move to
+   public enum ArmPositions { // Enum containing all of the possible Arm Postions we may want to move to
         FULLYRETRACTED(0),
-        UPRIGHT(0), // TODO: Set to good value
-        HATCHPICKUP(0); // TODO: Set to good value
+        UPRIGHT(546),
+        HATCHPICKUP(1404);
 
         private final int id;
         ArmPositions(int id) { this.id = id; }

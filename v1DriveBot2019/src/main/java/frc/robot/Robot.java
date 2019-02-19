@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.HatchArmManipulator.ArmPositions;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
@@ -58,6 +59,7 @@ public class Robot extends TimedRobot {
 
   // Declare Pnuematic systems and Vars
  private HatchArmManipulator armManipulator = new HatchArmManipulator(MotorConnectionsConfig.ArmMotorPWMPort, PnuematicConnectionConstants.Arm_Solenoid_Forward, PnuematicConnectionConstants.Arm_Solenoid_Reverse, 0, 1);
+ private RampController  rampController = new RampController(PnuematicConnectionConstants.Ramp_Solenoid_Forward, PnuematicConnectionConstants.Ramp_Solenoid_Reverse);
  private Compressor  PM_Compressor = new Compressor();
  
  /**
@@ -96,6 +98,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    armManipulator.periodicexec();
   }
 
   /**
@@ -137,7 +140,26 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    DiffDrive.arcadeDrive(ControllerJoy.getY(),  ControllerJoy.getX());  
+    DiffDrive.arcadeDrive(ControllerJoy.getY(),  ControllerJoy.getX());
+    if(ControllerJoy.getRawButton(1)){
+      armManipulator.setTargetPosition(ArmPositions.HATCHPICKUP);
+    } else if (ControllerJoy.getRawButton(2)){
+      armManipulator.setTargetPosition(ArmPositions.UPRIGHT);
+    } else {
+      armManipulator.setTargetPosition(ArmPositions.FULLYRETRACTED);
+    }
+
+    if(ControllerJoy.getRawButton(6)){
+      armManipulator.hatchEject();
+    } else {
+      armManipulator.hatchRetract();;
+    }
+
+    if(ControllerJoy.getRawButton(5)){
+      rampController.DropRamps();
+    } else {
+      rampController.RetractRamps();
+    }
   }
 
   /**
