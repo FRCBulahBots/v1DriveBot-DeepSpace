@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Talon;
 
@@ -53,8 +55,12 @@ public class Robot extends TimedRobot {
 
   DifferentialDrive DiffDrive = new DifferentialDrive(SRX_Master_L, SRX_Master_R);
   // End of Drive Decleration
+
+  // Declare Pnuematic systems and Vars
+ private HatchArmManipulator armManipulator = new HatchArmManipulator(MotorConnectionsConfig.ArmMotorPWMPort, PnuematicConnectionConstants.Arm_Solenoid_Forward, PnuematicConnectionConstants.Arm_Solenoid_Reverse, 0, 1);
+ private Compressor  PM_Compressor = new Compressor();
  
-  /**
+ /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
    */
@@ -75,6 +81,9 @@ public class Robot extends TimedRobot {
 
     SRX_Slave_R.setNeutralMode(NeutralMode.Brake);
     SRX_Slave_L.setNeutralMode(NeutralMode.Brake);
+
+    //Enable Air Compressor
+    PM_Compressor.setClosedLoopControl(true);
   }
 
   /**
